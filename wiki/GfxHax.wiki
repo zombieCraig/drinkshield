@@ -2,4 +2,4 @@
 
 = Introduction =
 
-GfxHax is a small company that specializes in Open Source Hardware & Art.  See [http://www.gfxhax.com/ Homepate] for more information.
+GfxHax is a small company that specializes in Open Source Hardware & Art.  See [http://www.gfxhax.com/ Homepage] for more information.
