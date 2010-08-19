@@ -1,0 +1,5 @@
+#summary Gfxhax Company Info
+
+= Introduction =
+
+GfxHax is a small company that specializes in Open Source Hardware & Art.  See [http://www.gfxhax.com/ Homepate] for more information.
