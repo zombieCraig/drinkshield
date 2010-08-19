@@ -1,0 +1,13 @@
+DrinkShield	KEYWORD1
+refreshLights	KEYWORD2
+setPlayerLights	KEYWORD2
+redLight	KEYWORD2
+greenLight	KEYWORD2
+lightBarLevel	KEYWORD2
+lightTest	KEYWORD2
+pollSerial	KEYWORD2
+autocalibrate	KEYWORD2
+getReading	KEYWORD2
+isClear	KEYWORD2
+getLightLevel	KEYWORD2
+
