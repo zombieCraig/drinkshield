@@ -4,8 +4,10 @@
 DrinkShield::DrinkShield(int major, int minor)
 {
    switch(major){
+   case 0:
    default:
 	switch(minor) {
+	case 1:
 	defaut:  // We assume the first gen boards if unknown vesrion
 		_mq3pin = 0;
 		_SHpin = 6;
@@ -27,6 +29,7 @@ DrinkShield::DrinkShield(int major, int minor)
 		pinMode(_STpin, OUTPUT);
 		pinMode(_SHpin, OUTPUT);
 		pinMode(_DSpin, OUTPUT);
+		break;
 	}
         break;
     }
