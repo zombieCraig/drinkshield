@@ -10,7 +10,7 @@
 #include "DrinkShield.h"
 
 // 0.1 is the version written on the DrinkShield board
-DrinkShield ds(0.1);
+DrinkShield ds(0,1);
 
 int highscoreLed = 0;  // The highest LED
 int lightLevel;        // Current LED level
@@ -19,6 +19,7 @@ void setup()
 {
   // Take 20 air samples when we first turn on the system
  ds.autocalibrate(20);
+ ds.greenLight(ON);
 }
 
 void loop()
