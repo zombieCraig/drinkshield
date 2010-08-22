@@ -16,8 +16,10 @@ class DrinkShield
 {
   public:
 	DrinkShield(int, int);
-	char version[100];
+	char *version;
+	int playerReady;
 	void refreshLights();
+	void updatePlayerLights();
 	void setPlayerLights(int, int);
 	void redLight(int);
 	void greenLight(int);
@@ -39,7 +41,6 @@ class DrinkShield
 
 	int _highscore;
 	int _startrecording;
-	int _playerReady;
 	int _baseline;
 	int _startTime;
 

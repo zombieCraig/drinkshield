@@ -17,14 +17,14 @@ DrinkShield::DrinkShield(int major, int minor)
 		_numLights = 11;
 
 		_highscore = 0;
-		_playerReady = 0;
+		playerReady = 0;
 		_baseline = 70;
 		_startTime = 0;
 
 		_currentLevel = 0;
 		_greenLightState = 0;
 		_redLightState = 0;
-		sprintf(version, "drinkShield v%0.2f", 0.3);
+		version = "drinkShield v0.3";
 
 		pinMode(_STpin, OUTPUT);
 		pinMode(_SHpin, OUTPUT);
@@ -71,6 +71,15 @@ void DrinkShield::refreshLights()
 	// Throw Latch
 	digitalWrite(_STpin, HIGH);
 	digitalWrite(_STpin, LOW);
+}
+
+// Updates player lights based on current playerReady state
+void DrinkShield::updatePlayerLights()
+{
+  if(playerReady)
+	setPlayerLights(OFF, ON);
+  else
+	setPlayerLights(ON, OFF);
 }
 
 // Sets both player lights at the same time
@@ -128,19 +137,21 @@ void DrinkShield::pollSerial()
 		case 'r':	// Player Ready
 			setPlayerLights(OFF, ON);
 			Serial.println("Blow!");
-			_playerReady = 1;
+			playerReady = 1;
 			_highscore = 0;
 			_startTime = 0;
 			break;
 		case 'a':	// Auto-Calibrate
 			setPlayerLights(ON, ON);
 			autocalibrate(20);
+			updatePlayerLights();
 			break;
 		case 'l':	// Light test
 			lightTest();
 			break;
 		case 'A':	// Abort player ready
-			_playerReady = 0;
+			playerReady = 0;
+			setPlayerLights(ON, OFF);
 			break;
 		}
 	}
@@ -193,3 +204,4 @@ int DrinkShield::getLightLevel(int val)
 {
 	return map(val, 0, 256-_baseline, 0, _numLights);
 }
+

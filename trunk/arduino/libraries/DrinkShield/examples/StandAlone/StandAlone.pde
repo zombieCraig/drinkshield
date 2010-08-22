@@ -19,7 +19,10 @@ void setup()
 {
   // Take 20 air samples when we first turn on the system
  ds.autocalibrate(20);
+ // Turn on the Ready light and turn off the rest
  ds.greenLight(ON);
+ ds.redLight(OFF);
+ ds.lightBarLevel(0, 0);
 }
 
 void loop()
