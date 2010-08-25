@@ -1,0 +1,33 @@
+DruinkDuino Game for the GfxHax DrinkShield
+===========================================
+SDL Game to work with the Open Source breathalyzer device
+called the DrinkShield.  The game is a SDL based game
+that keeps track of high scores and rankings.  It has a
+SQLite3 DB that can easily be tied into other apps.
+
+Original Author: Craig Smith <craig@gfxhax.com>
+
+== Required Libraries ==
+* SDL
+* SDL_image
+* SDL_ttf
+* SDL_gfx
+* sqlite3
+
+== Compiling instructions ==
+./configure
+make
+make install
+
+== Usage ==
+"drinkduino -h" will provide updated usage but should be able to run
+without any command line options
+
+NOTE:
+
+This product is still a work in progress.  Some screens may not be finished and are just placeholders where better graphics/buttons will eventually go.  At
+the moment we are focusing on getting the engine working smoothly.
+
+== Contribute ==
+To contribute code, art, etc.  Send email to craig@gfxhax.com
+
