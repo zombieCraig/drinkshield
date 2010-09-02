@@ -383,6 +383,7 @@ void GameData::switchState(int newstate) {
 	break;
    case GAME_STATE_ADD_NEW:
 	gui->state = STATE_ADD_NEW_SCREEN;
+	gui->addNewName.clear();
 	gui->redraw();
 	break;
    case GAME_STATE_MAIN:
