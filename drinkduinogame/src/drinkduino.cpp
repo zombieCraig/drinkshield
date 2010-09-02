@@ -76,6 +76,7 @@ int main(int argc, char *argv[]) {
 	exit(1);
     }
 
+    g->gui->splashMsg("Initializing Drink Shields...");
     if(g->init_drinkShields() <= 0) {
 	cerr << "Could not connect to drink shield.  Check port settings." << endl;
 	exit(2);
@@ -83,6 +84,7 @@ int main(int argc, char *argv[]) {
     if(g->verbose)
 	cout << "Found " << g->numShields() << " shield(s)" << endl;
 
+    g->gui->splashMsg("Initializing SQL...");
     if(!g->sql->init()) {
 	cerr << "Could not initialize Scores." << endl;
 	exit(3);
@@ -92,6 +94,7 @@ int main(int argc, char *argv[]) {
     g->refreshPlayerData();
 
     // Pause for keypress (or mousebutton)
+    g->gui->splashMsg("INITIALIZED.  Press Any Key");
     g->gui->anyKey();
 
     // Done with Splash Screen and initialization.  It's game time.

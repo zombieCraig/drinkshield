@@ -186,15 +186,15 @@ void Gui::loadFonts()
 		return;
 	}
 	fontfile = font_path + "/bluebold.ttf";
-	AnyFont = TTF_OpenFont(fontfile.c_str(), 24);
-	if(!AnyFont) {
+	SplashMsgFont = TTF_OpenFont(fontfile.c_str(), 24);
+	if(!SplashMsgFont) {
 		cerr << "Unable to load name font: " << fontfile << endl;
 		SDL_Quit();
 		return;
 	}
 	fontfile = font_path + "/Harabara.ttf";
 	NumberFont = TTF_OpenFont(fontfile.c_str(), 18);
-	if(!AnyFont) {
+	if(!NumberFont) {
 		cerr << "Unable to load name font: " << fontfile << endl;
 		SDL_Quit();
 		return;
@@ -802,22 +802,32 @@ void Gui::updateAddNewNamebox()
    SDL_UpdateRect(screen, addNamebox.x, addNamebox.y, addNamebox.w, addNamebox.h);
 }
 
+void Gui::splashMsg(char *msg) {
+   SDL_Rect msgbox;
+   SDL_Surface *msgtext;
+   SDL_Color msgcolor =  { 0x4a, 0xba, 0x0d, 0 };
+
+   msgbox.y = 536;
+   msgbox.x = 0;
+   msgbox.h = 50;
+   msgbox.w = screen->w;
+   SDL_BlitSurface(splashscreen, &msgbox, screen, &msgbox);
+   SDL_UpdateRect(screen, msgbox.x, msgbox.y, msgbox.w, msgbox.h);
+
+   msgtext = TTF_RenderText_Blended(SplashMsgFont, msg, msgcolor);
+
+   msgbox.x = screen->w / 2 - msgtext->w / 2;
+   msgbox.w = msgtext->w;
+   msgbox.h = msgtext->h;
+
+   SDL_BlitSurface(msgtext, NULL, screen, &msgbox);
+   SDL_UpdateRect(screen, msgbox.x, msgbox.y, msgbox.w, msgbox.h);
+}
+
 // Poll for any key to be pressed
 void Gui::anyKey()
 {
    int running = 1;
-   SDL_Rect anybox;
-   SDL_Surface *anytext;
-   SDL_Color anycolor = { 0x4a, 0xba, 0x0d, 0 };
-
-   anytext = TTF_RenderText_Blended(AnyFont, "INITIALIZED.  Press Any Key", anycolor);
-   anybox.x = screen->w / 2 - anytext->w / 2;
-   anybox.y = 536;
-   anybox.w = anytext->w;
-   anybox.h = anytext->h;
-
-   SDL_BlitSurface(anytext, NULL, screen, &anybox);
-   SDL_UpdateRect(screen, anybox.x, anybox.y, anybox.w, anybox.h);
 	
    while(running) {
 	while(SDL_PollEvent(&event)) {

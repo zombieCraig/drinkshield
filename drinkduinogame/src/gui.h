@@ -113,6 +113,7 @@ public:
   void anyKey();
   void splashShields(int);
   void splashFriends(int);
+  void splashMsg(char *);
   void updateAddNewNamebox();
   TTF_Font *getListFont();
   SDL_Surface *createBlankSurface(int,int);
@@ -138,7 +139,7 @@ private:
   SDL_Event event;
   TTF_Font *NameFont;
   TTF_Font *ScoreFont;
-  TTF_Font *AnyFont;
+  TTF_Font *SplashMsgFont;
   TTF_Font *NumberFont;
   TTF_Font *ListFont;
   TTF_Font *NewNameFont;
