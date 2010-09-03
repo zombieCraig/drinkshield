@@ -18,10 +18,12 @@
 #include "drinkshield.h"
 #include "player.h"
 #include "scrollbar.h"
+#include "countdowntimer.h"
 
 #define NO  0
 #define YES 1
 #define DEFAULT_SERIALPORT "/dev/ttyUSB0"
+#define BOOTH_START_TIME 3
 #define GAME_STATE_INIT -1
 #define GAME_STATE_MAIN 0
 #define GAME_STATE_ADD_PLAYERS 1
@@ -32,6 +34,7 @@ class Sql;
 class Player;
 class GameData;
 class Scrollbar;
+class CountdownTimer;
 
 extern GameData *g;
 
@@ -90,12 +93,14 @@ public:
   void moveAddtoAllBox();
   void addBoxtoActivePlayers();
   void addNewPlayer(string,string);
+  void takePlayerPictures();
   Player *activePlayerLeft1();
   Player *activePlayerLeft2();
   Player *activePlayerRight1();
   Player *activePlayerRight2();
   Scrollbar *allPlayersBox;
   Scrollbar *addPlayersBox;
+  CountdownTimer *boothTimer;
 
   /* Callbacks */
   static int addPlayerFromDB(void *blah, int argc, char *argv[], char *col[]) {

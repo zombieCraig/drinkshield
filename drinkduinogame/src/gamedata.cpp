@@ -9,6 +9,7 @@ GameData::GameData()
 	srand(time(NULL));
 	gui = new Gui(this);
 	sql = new Sql();
+	boothTimer = new CountdownTimer(BOOTH_START_TIME);
 	emulate_device = 0;
 	verbose = 0;
 	gameState = GAME_STATE_INIT;
@@ -537,6 +538,23 @@ void GameData::enableDUImode()
 	gui->duiMode = 1;
 }
 
+// Takes player pictures from the photobooth
+void GameData::takePlayerPictures()
+{
+	SDL_Surface *snapshot;
+	int count = boothTimer->getCount();
+	if(count == 0) { // Countdown Complete
+		if(verbose)
+			cout << "Click!" << endl;
+		gui->cam->addSnapshot();
+		gui->updateSnapshots();
+		if(gui->cam->shotsTaken() == 4)
+			boothTimer->stop();
+		else
+			boothTimer->reset();
+	}
+}
+
 // Adds players from the Add scrollbar to activeplayers
 void GameData::addBoxtoActivePlayers()
 {
@@ -591,6 +609,8 @@ int GameData::mainLoop()
   while(running) {
 	switch(gameState) {
 	case GAME_STATE_ADD_NEW: // Creates a new player
+		if(boothTimer->isActive()) 
+			takePlayerPictures();
 		gui->updateNewPlayerAnimations();
 		result = gui->addNewEvents();
 		if(result == -1) { // Done
