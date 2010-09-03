@@ -38,6 +38,8 @@ Gui::Gui(GameData *engine)
   font_path = data_path + "/" + string(FONT_DIR);
   img_path = data_path + "/" + string(IMG_DIR);
 
+  cam = NULL;  // Camera display
+
   /* Box Regions */
   leftArrow.x = 20;
   leftArrow.y = 155;
@@ -107,6 +109,26 @@ Gui::Gui(GameData *engine)
   addNamebox.y = 364;
   addNamebox.w = 413;
   addNamebox.h = 51;
+  addWebcam.x = 243;
+  addWebcam.y = 87;
+  addWebcam.w = 320;
+  addWebcam.h = 240;
+  addPic1.x = 590;
+  addPic1.y = 76;
+  addPic1.w = 48;
+  addPic1.h = 48;
+  addPic2.x = 590;
+  addPic2.y = 140;
+  addPic2.w = 48;
+  addPic2.h = 48;
+  addPic3.x = 590;
+  addPic3.y = 205;
+  addPic3.w = 48;
+  addPic3.h = 48;
+  addPic4.x = 590;
+  addPic4.y = 270;
+  addPic4.w = 48;
+  addPic4.h = 48;
 }
 
 Gui::~Gui()
@@ -451,6 +473,27 @@ void Gui::updateTicks()
 	oldticks = SDL_GetTicks();
 	oldguyticks = SDL_GetTicks();
 	gearticks = SDL_GetTicks();
+}
+
+// This is for the add new player screen.  Mainly updates webcam
+void Gui::updateNewPlayerAnimations()
+{
+	SDL_Surface *frame, *livecam;
+	double xscalefactor, yscalefactor;
+
+	/* WebCam */
+	if(cam) {
+		if(cam->hasWebCam()) {
+			frame = cam->getFrame();
+			/* Resize Image */
+			xscalefactor = (double)addWebcam.w / (double)frame->w;
+			yscalefactor = (double)addWebcam.h / (double)frame->h;
+			livecam = zoomSurface(frame,xscalefactor,yscalefactor,SMOOTHING_ON); 
+			SDL_BlitSurface(livecam, NULL, screen, &addWebcam);
+			SDL_UpdateRect(screen, addWebcam.x, addWebcam.y, addWebcam.w, addWebcam.h);
+			SDL_FreeSurface(livecam);
+		}
+	}
 }
 
 // Update any animations on the screen
@@ -802,7 +845,26 @@ void Gui::updateAddNewNamebox()
    SDL_UpdateRect(screen, addNamebox.x, addNamebox.y, addNamebox.w, addNamebox.h);
 }
 
-void Gui::splashMsg(char *msg) {
+// Enables the webcam and returns true of successful, else false
+bool Gui::enableCamera()
+{
+   cam = new Camera();
+   if(verbose) {
+	if(cam->hasWebCam())
+		cout << "Webcam detected and initialized." << endl;
+	else
+		cout << "No webcam detected." << endl;
+   }
+   return cam->hasWebCam();
+}
+
+// Disables the webcam
+void Gui::disableCamera()
+{
+   delete cam;
+}
+
+void Gui::splashMsg(const char *msg) {
    SDL_Rect msgbox;
    SDL_Surface *msgtext;
    SDL_Color msgcolor =  { 0x4a, 0xba, 0x0d, 0 };

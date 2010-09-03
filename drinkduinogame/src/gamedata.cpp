@@ -384,6 +384,7 @@ void GameData::switchState(int newstate) {
    case GAME_STATE_ADD_NEW:
 	gui->state = STATE_ADD_NEW_SCREEN;
 	gui->addNewName.clear();
+	gui->enableCamera();
 	gui->redraw();
 	break;
    case GAME_STATE_MAIN:
@@ -589,16 +590,18 @@ int GameData::mainLoop()
 
   while(running) {
 	switch(gameState) {
-	case GAME_STATE_ADD_NEW:
+	case GAME_STATE_ADD_NEW: // Creates a new player
+		gui->updateNewPlayerAnimations();
 		result = gui->addNewEvents();
 		if(result == -1) { // Done
 			addNewPlayer(gui->addNewName, gui->addNewPicPath);
 		}
 		if(result < 0) { // Cancel or Done
+			gui->disableCamera();
 			switchState(GAME_STATE_ADD_PLAYERS);
 		}
 		break;
-	case GAME_STATE_ADD_PLAYERS:
+	case GAME_STATE_ADD_PLAYERS: // Selects players
 		result = gui->addPlayerEvents();
 		if(result == -1) { // Done
 			addBoxtoActivePlayers();

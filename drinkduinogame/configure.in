@@ -26,6 +26,8 @@ AC_CHECK_LIB([SDL_image], [IMG_Load])
 AC_CHECK_LIB([SDL_ttf], [TTF_RenderText_Blended])
 AC_CHECK_LIB([SDL_gfx], [zoomSurface])
 AC_CHECK_LIB([sqlite3], [sqlite3_prepare])
+AC_CHECK_LIB([cv], [cvResize])
+AC_CHECK_LIB([highgui], [cvCreateCameraCapture])
 AX_LIB_SQLITE3(3.5.9)
 AM_PATH_SDL([1.2.0], [], [
   AC_ERROR([SDL not found])
@@ -33,6 +35,8 @@ AM_PATH_SDL([1.2.0], [], [
 
 # Checks for header files.
 AC_CHECK_HEADER([SDL/SDL_rotozoom.h], [], [AC_MSG_ERROR([Missing SDL_rotozoom.  Please install libsdl-gfx1.2-dev])])
+AC_CHECK_HEADER([opencv/cv.h], [], [AC_MSG_ERROR([Missing OpenCV headers.  Please install libcv-dev])])
+AC_CHECK_HEADER([opencv/highgui.h], [], [AC_MSG_ERROR([Missing OpenCV HighGUI headers.  Please install libhighgui-dev])])
 AC_CHECK_HEADERS([fcntl.h stdlib.h string.h sys/ioctl.h termios.h unistd.h])
 
 # Checks for typedefs, structures, and compiler characteristics.
