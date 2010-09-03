@@ -11,6 +11,8 @@
 #include <opencv/cv.h>
 #include <opencv/highgui.h>
 
+#define MAX_SNAPS	4
+
 using namespace std;
 
 class Camera
@@ -18,9 +20,13 @@ class Camera
 public:
   Camera();
   ~Camera();
+  SDL_Surface *snapshot[MAX_SNAPS];
   bool hasWebCam();
   SDL_Surface *getFrame();
+  void addSnapshot();
+  int shotsTaken();
 private:
+  int snapCount;
   CvCapture *capture;
   bool camera_found;
 };

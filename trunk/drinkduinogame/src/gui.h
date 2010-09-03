@@ -120,10 +120,12 @@ public:
   bool enableCamera();
   void disableCamera();
   void updateNewPlayerAnimations();
+  void updateSnapshots();
   TTF_Font *getListFont();
   SDL_Surface *createBlankSurface(int,int);
   SDL_Surface *loadImage(const char *);
   SDL_Surface *getAnonPic();
+  Camera *cam;
 private:
   SDL_Surface *splashscreen;
   SDL_Surface *anonpic;
@@ -152,7 +154,6 @@ private:
   int oldticks, oldguyticks, gearticks;
   int scoreidx;
   int currentGuyFrame, guyRank;
-  Camera *cam;
 };
 
 #endif /* __GUI_H__ */

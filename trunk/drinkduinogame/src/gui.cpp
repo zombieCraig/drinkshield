@@ -573,6 +573,44 @@ void Gui::updateAnimations()
 
 }
 
+// Updates Snapshots taken in photo booth
+void Gui::updateSnapshots()
+{
+   double xscale, yscale;
+   SDL_Surface *snap;
+   if(cam->shotsTaken() > 0) {
+	if(cam->snapshot[0]) {  // 1st pic
+		xscale = (double)addPic1.w / (double)cam->snapshot[0]->w;
+		yscale = (double)addPic1.h / (double)cam->snapshot[0]->h;
+		snap = zoomSurface(cam->snapshot[0], xscale, yscale, SMOOTHING_ON);
+		SDL_BlitSurface(snap, NULL, screen, &addPic1);
+		SDL_FreeSurface(snap);
+	}
+	if(cam->snapshot[1]) {  // 2nd pic
+		xscale = (double)addPic2.w / (double)cam->snapshot[1]->w;
+		yscale = (double)addPic2.h / (double)cam->snapshot[1]->h;
+		snap = zoomSurface(cam->snapshot[1], xscale, yscale, SMOOTHING_ON);
+		SDL_BlitSurface(snap, NULL, screen, &addPic2);
+		SDL_FreeSurface(snap);
+	}
+	if(cam->snapshot[2]) {  // 3rd pic
+		xscale = (double)addPic3.w / (double)cam->snapshot[2]->w;
+		yscale = (double)addPic3.h / (double)cam->snapshot[2]->h;
+		snap = zoomSurface(cam->snapshot[2], xscale, yscale, SMOOTHING_ON);
+		SDL_BlitSurface(snap, NULL, screen, &addPic3);
+		SDL_FreeSurface(snap);
+	}
+	if(cam->snapshot[3]) {  // 4th pic
+		xscale = (double)addPic4.w / (double)cam->snapshot[3]->w;
+		yscale = (double)addPic4.h / (double)cam->snapshot[3]->h;
+		snap = zoomSurface(cam->snapshot[3], xscale, yscale, SMOOTHING_ON);
+		SDL_BlitSurface(snap, NULL, screen, &addPic4);
+		SDL_FreeSurface(snap);
+	}
+	SDL_UpdateRect(screen, addPic1.x, addPic1.y, addPic1.w, addPic4.y + addPic4.h);
+   }
+}
+
 // Toggle a light from the main dialog screen
 void Gui::light(SDL_Rect b, int state)
 {
@@ -925,7 +963,12 @@ int Gui::addNewEvents()
 			addNewName.clear();
 			updateAddNewNamebox();
 		} else if(isover(addSmilebtn)) {
-			cout << "TODO: Implement smile button" << endl;
+			if(!game->boothTimer->isActive()) {
+				game->boothTimer->setSeconds(BOOTH_START_TIME);
+				game->boothTimer->start();
+				if(verbose)
+					cout << "Timer started. Smile!" <<endl;
+			}
 		}
 		break;
 	case SDL_KEYDOWN:
