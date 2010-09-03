@@ -20,6 +20,7 @@
 #include "../config.h"
 
 #include "gamedata.h"
+#include "camera.h"
 
 #define PIC_DIR "pics"
 #define FONT_DIR "fonts"
@@ -66,6 +67,7 @@
 #define ON 1
 
 class GameData;
+class Camera;
 
 using namespace std;
 
@@ -113,8 +115,11 @@ public:
   void anyKey();
   void splashShields(int);
   void splashFriends(int);
-  void splashMsg(char *);
+  void splashMsg(const char *);
   void updateAddNewNamebox();
+  bool enableCamera();
+  void disableCamera();
+  void updateNewPlayerAnimations();
   TTF_Font *getListFont();
   SDL_Surface *createBlankSurface(int,int);
   SDL_Surface *loadImage(const char *);
@@ -136,6 +141,7 @@ private:
   SDL_Rect gearLoc, abortLoc, friendLoc;
   SDL_Rect donebox, addArrow, removeArrow, addNewbtn;
   SDL_Rect addDonebox, addCancelbox, addSmilebtn, addNamebox;
+  SDL_Rect addWebcam, addPic1, addPic2, addPic3, addPic4;
   SDL_Event event;
   TTF_Font *NameFont;
   TTF_Font *ScoreFont;
@@ -146,6 +152,7 @@ private:
   int oldticks, oldguyticks, gearticks;
   int scoreidx;
   int currentGuyFrame, guyRank;
+  Camera *cam;
 };
 
 #endif /* __GUI_H__ */
