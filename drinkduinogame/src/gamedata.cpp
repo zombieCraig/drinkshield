@@ -34,13 +34,13 @@ void GameData::setRCdir(string dir)
   struct stat st;
   string scoredb;
   rcdir = dir + "/.drinkduino/";
-  gui->setRCdir(rcdir);
   // create directory if it doesn't exist
   if(stat(rcdir.c_str(), &st) != 0) {
 	mkdir(rcdir.c_str(), 0755);
 	if(verbose)
 		cout << "Created " << rcdir << endl;
   }
+  gui->setRCdir(rcdir);
   scoredb = rcdir + DB_FILE;
   sql->setDBFile(scoredb);
 }
@@ -264,14 +264,7 @@ void GameData::refreshPlayerData()
 
 	if(!sql->exec(sqlcmd, &addScoreDataFromDB, p))
 		cerr << " Could not refresh scores for player id " << p->id << endl;
-	if(p->picpath.size() > 0)  {
-		pic = gui->loadImage(p->picpath.c_str());
-		if(pic)
-			p->pic->addPic(pic);
-		else // Error occured loading pic
-			p->pic->addPic(gui->getAnonPic());
-	} else 
-		p->pic->addPic(gui->getAnonPic());
+	loadPlayerPics(p);
   }
 
   gui->splashFriends(players.size());
@@ -288,6 +281,32 @@ Player *GameData::getPlayerByID(int id)
 	if(p->id == id)
 		return p;
   return 0;
+}
+
+// Loads the players pics if they exist
+void GameData::loadPlayerPics(Player *p)
+{
+	struct stat st;
+	int i;
+	string newpic;
+	SDL_Surface *img;
+	char b[2];
+	bool found = 0;
+
+	b[0] = '_';
+	b[2] = 0;
+	for(i=0;i<4;i++) {
+		b[1] = 0x30 + i;
+		newpic = gui->pic_path + "/" + p->name + string(b) + ".bmp";
+		if(stat(newpic.c_str(), &st) == 0) {
+			found = 1;
+			img = SDL_LoadBMP(newpic.c_str());
+			p->pic->addPic(img);
+		}
+	}
+	if(!found)
+		p->pic->addPic(gui->getAnonPic());
+
 }
 
 void GameData::addPlayer(Player *p)
@@ -362,7 +381,7 @@ void GameData::dumpPlayerInfo()
 
   for(vector<Player *>::iterator it = players.begin(); it != players.end() && (p = *it); ++it) {
 	count = 0;
-	cout << "Player: " << p->name << " (" << p->picpath << ")" << endl;
+	cout << "Player: " << p->name << endl;
 	for(vector<Score *>::iterator it2 = p->scores.begin(); it2 != p->scores.end() && (s = *it2); ++it2) {
 		count++;
 		cout << "  " << count << ") " << s->points << endl;
@@ -555,6 +574,29 @@ void GameData::takePlayerPictures()
 	}
 }
 
+// Saves new players pictures to disk
+// This creates 4 BMP files in the pic_path
+void GameData::savePictures(string name)
+{
+	int i;
+	string picfile;
+	char b[2];
+
+	b[0] = '_';
+	b[2] = 0;
+	// First ensure the camera is setup
+	if(gui->cam) {
+		/* We want a completed session of 4 pics */
+		if(gui->cam->shotsTaken() == 4) {
+			for(i=0;i < 4; i++) {
+				b[1] = 0x30 + i;
+				picfile = gui->pic_path + "/" + name + string(b) + ".bmp";
+				SDL_SaveBMP(gui->cam->snapshot[i], picfile.c_str());
+			}
+		}
+	}
+}
+
 // Adds players from the Add scrollbar to activeplayers
 void GameData::addBoxtoActivePlayers()
 {
@@ -568,21 +610,13 @@ void GameData::addBoxtoActivePlayers()
 }
 
 // Adds a new player to the DB
-void GameData::addNewPlayer(string playerName, string picPath)
+void GameData::addNewPlayer(string playerName)
 {
 	SDL_Surface *pic;
 	Player *p = new Player();
 	p->name = playerName;
-	p->picpath = picPath;
-	if(p->picpath.size() > 0)  {
-		pic = gui->loadImage(p->picpath.c_str());
-		if(pic)
-			p->pic->addPic(pic);
-		else // Error occured loading pic
-			p->pic->addPic(gui->getAnonPic());
-	} else 
-		p->pic->addPic(gui->getAnonPic());
-	p->id=sql->insertPlayer(playerName, picPath);
+	p->id=sql->insertPlayer(playerName);
+	loadPlayerPics(p);
 	addPlayer(p);
 }
 
@@ -614,7 +648,10 @@ int GameData::mainLoop()
 		gui->updateNewPlayerAnimations();
 		result = gui->addNewEvents();
 		if(result == -1) { // Done
-			addNewPlayer(gui->addNewName, gui->addNewPicPath);
+			if(gui->addNewName.size() > 0) {
+				savePictures(gui->addNewName);
+				addNewPlayer(gui->addNewName);
+			}
 		}
 		if(result < 0) { // Cancel or Done
 			gui->disableCamera();

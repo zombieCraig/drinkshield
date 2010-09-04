@@ -151,7 +151,7 @@ Gui::~Gui()
 void Gui::setRCdir(string rcdir)
 {
   struct stat st;
-  rcpath = rcpath;
+  rcpath = rcdir;
   pic_path = rcpath + "/" + string(PIC_DIR);
   if(stat(pic_path.c_str(), &st) != 0)
 	mkdir(pic_path.c_str(), 0755);
@@ -711,7 +711,8 @@ void Gui::updateProfileBar()
 {
   Player *p;
   SDL_Rect profilebar, status;
-  SDL_Surface *pic;
+  SDL_Surface *pic, *sp;
+  double xscale, yscale;
 
   if(game->players.size() == 0) return;
 
@@ -728,47 +729,62 @@ void Gui::updateProfileBar()
   SDL_BlitSurface(maindlg, &profilebar, screen, &profilebar);
 
   pic = game->activePlayer->pic->getPic();
-  mainpic.x = screen->w / 2 - pic->w / 2;
   mainpic.y = profilebar.y + 2;
-  mainpic.w = pic->w;
-  mainpic.h = pic->h;
-  SDL_BlitSurface(pic, NULL, screen, &mainpic);
+  mainpic.w = 160;
+  mainpic.h = profilebar.h - 4;
+  xscale = (double)mainpic.w / (double)pic->w;
+  yscale = (double)mainpic.h / (double)pic->h;
+  sp = zoomSurface(pic, xscale, yscale, SMOOTHING_ON);
+  mainpic.x = screen->w / 2 - sp->w / 2;
+  SDL_BlitSurface(sp, NULL, screen, &mainpic);
 
   p = game->activePlayerLeft1();
   if(p) {
 	pic = p->pic->getPic();
-	l1pic.x = mainpic.x - pic->w - 10;
+  	xscale = (double)mainpic.w / (double)pic->w;
+	yscale = (double)mainpic.h / (double)pic->h;
+	sp = zoomSurface(pic, xscale, yscale, SMOOTHING_ON);
+	l1pic.x = mainpic.x - sp->w - 10;
 	l1pic.y = mainpic.y;
-	l1pic.w = pic->w;
-	l1pic.h = pic->h;
-	SDL_BlitSurface(pic, NULL, screen, &l1pic);
+	l1pic.w = sp->w;
+	l1pic.h = sp->h;
+	SDL_BlitSurface(sp, NULL, screen, &l1pic);
 	p = game->activePlayerLeft2();
 	if(p) {
 		pic = p->pic->getPic();
-		l2pic.x = l1pic.x - pic->w - 10;
+  		xscale = (double)mainpic.w / (double)pic->w;
+		yscale = (double)mainpic.h / (double)pic->h;
+		sp = zoomSurface(pic, xscale, yscale, SMOOTHING_ON);
+		l2pic.x = l1pic.x - sp->w - 10;
 		l2pic.y = mainpic.y;
-		l2pic.w = pic->w;
-		l2pic.h = pic->h;
-		SDL_BlitSurface(pic, NULL, screen, &l2pic);
+		l2pic.w = sp->w;
+		l2pic.h = sp->h;
+		SDL_BlitSurface(sp, NULL, screen, &l2pic);
 	}
   }
 
   p = game->activePlayerRight1();
   if(p) {
 	pic = p->pic->getPic();
-	r1pic.x = mainpic.x + pic->w + 10;
+	xscale = (double)mainpic.w / (double)pic->w;
+	yscale = (double)mainpic.h / (double)pic->h;
+	sp = zoomSurface(pic, xscale, yscale, SMOOTHING_ON);
+	r1pic.x = mainpic.x + sp->w + 10;
 	r1pic.y = mainpic.y;
-	r1pic.w = pic->w;
-	r2pic.h = pic->h;
-	SDL_BlitSurface(pic, NULL, screen, &r1pic);
+	r1pic.w = sp->w;
+	r2pic.h = sp->h;
+	SDL_BlitSurface(sp, NULL, screen, &r1pic);
 	p = game->activePlayerRight2();
 	if(p) {
 		pic = p->pic->getPic();
-		r2pic.x = r1pic.x + pic->w + 10;
+		xscale = (double)mainpic.w / (double)pic->w;
+		yscale = (double)mainpic.h / (double)pic->h;
+		sp = zoomSurface(pic, xscale, yscale, SMOOTHING_ON);
+		r2pic.x = r1pic.x + sp->w + 10;
 		r2pic.y = mainpic.y;
-		r2pic.w = pic->w;
-		r2pic.h = pic->h;
-		SDL_BlitSurface(pic, NULL, screen, &r2pic);
+		r2pic.w = sp->w;
+		r2pic.h = sp->h;
+		SDL_BlitSurface(sp, NULL, screen, &r2pic);
 	}
   }
 

@@ -23,7 +23,6 @@ public:
   ~Player();
   int id;
   string name;
-  string picpath;
   ProfilePic *pic;
   vector<Score *>scores;
   void addScoreFromDB(int);
