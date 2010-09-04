@@ -23,7 +23,7 @@
 #define NO  0
 #define YES 1
 #define DEFAULT_SERIALPORT "/dev/ttyUSB0"
-#define BOOTH_START_TIME 3
+#define BOOTH_START_TIME 5
 #define GAME_STATE_INIT -1
 #define GAME_STATE_MAIN 0
 #define GAME_STATE_ADD_PLAYERS 1
