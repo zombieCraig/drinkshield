@@ -92,8 +92,10 @@ public:
   void moveAlltoAddBox();
   void moveAddtoAllBox();
   void addBoxtoActivePlayers();
-  void addNewPlayer(string,string);
+  void addNewPlayer(string);
   void takePlayerPictures();
+  void savePictures(string);
+  void loadPlayerPics(Player *);
   Player *activePlayerLeft1();
   Player *activePlayerLeft2();
   Player *activePlayerRight1();
@@ -110,15 +112,12 @@ public:
    // Player data is already present
    if(p) {
 	p->name = string(argv[1]);
-	p->picpath = string(argv[2]);
 	return 0;
    }
 
    p = new Player();
    p->id = id;
    p->name = string(argv[1]);
-   if(argv[2]) // Check for NULL
-	   p->picpath = string(argv[2]);
 
    g->addPlayer(p);
    return 0;

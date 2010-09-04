@@ -13,13 +13,27 @@ ProfilePic::ProfilePic()
 
 ProfilePic::~ProfilePic()
 {
+	SDL_Surface *pp;
+
+	for(vector<SDL_Surface *>::iterator it = pics.begin(); it != pics.end() && (pp = *it); ++it)
+		SDL_FreeSurface(pp);
 	pics.clear();
 }
 
 void ProfilePic::addPic(SDL_Surface *newpic)
 {
-	if(newpic)
-		pics.push_back(newpic);
+	SDL_Surface *savepic;
+	if(newpic) {
+		savepic = SDL_CreateRGBSurface( newpic->flags, newpic->w, newpic->h,
+			newpic->format->BitsPerPixel,
+			newpic->format->Rmask,
+			newpic->format->Gmask,
+			newpic->format->Bmask,
+			newpic->format->Amask);
+		SDL_BlitSurface(newpic, NULL, savepic, NULL);
+
+		pics.push_back(savepic);
+	}
 }
 
 void ProfilePic::nextFrame()

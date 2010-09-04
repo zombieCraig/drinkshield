@@ -82,15 +82,15 @@ int Sql::exec(const char *query, int (*callback)(void*,int,char**,char**), void 
 void Sql::insertScore(int id, int score, time_t recordtime)
 {
    char query[256];
-    snprintf(query, 255, "INSERT INTO scores VALUES(%d,%d,%d)",id, score, recordtime);
+    snprintf(query, 255, "INSERT INTO scores VALUES(%d,%d,%d)",id, score, (int)recordtime);
    exec(query, NULL, NULL);
 }
 
 // Inserts a new player to the DB
-int Sql::insertPlayer(string playerName, string picPath)
+int Sql::insertPlayer(string playerName)
 {
    char query[256];
-    snprintf(query, 255, "INSERT INTO players VALUES(NULL,'%s','%s')",playerName.c_str(), picPath.c_str());
+    snprintf(query, 255, "INSERT INTO players VALUES(NULL,'%s')",playerName.c_str());
    exec(query, NULL, NULL);
    return sqlite3_last_insert_rowid(db);
 }

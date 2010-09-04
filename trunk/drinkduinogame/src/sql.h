@@ -10,7 +10,7 @@
 #include <iostream>
 
 #define DB_FILE "drinkScorez"
-#define CREATE_PLAYER_TBL "CREATE TABLE IF NOT EXISTS players(id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR(256) NOT NULL UNIQUE, pic VARCHAR(256))"
+#define CREATE_PLAYER_TBL "CREATE TABLE IF NOT EXISTS players(id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR(256) NOT NULL UNIQUE)"
 #define CREATE_SCORE_TBL "CREATE TABLE IF NOT EXISTS scores(id INTEGER, score INTEGER, submitted INTEGER)"
  #define GET_SCORES "SELECT * FROM scores WHERE id=? ORDER BY score DESC LIMIT 10 "
 
@@ -28,7 +28,7 @@ public:
   int exec(const char *, int (*callback)(void*,int,char**,char**), void *);
   int init();
   void insertScore(int,int,time_t);
-  int insertPlayer(string,string);
+  int insertPlayer(string);
 private:
   sqlite3 *db;
   string dbfile;
