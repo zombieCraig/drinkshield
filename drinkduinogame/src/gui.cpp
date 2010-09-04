@@ -12,6 +12,7 @@ Gui::Gui(GameData *engine)
   anonpic = NULL;
   NameFont = NULL;
   ScoreFont = NULL;
+  CountFont = NULL;
   screen = NULL;
   splashscreen = NULL;
   maindlg = NULL;
@@ -211,6 +212,13 @@ void Gui::loadFonts()
 	SplashMsgFont = TTF_OpenFont(fontfile.c_str(), 24);
 	if(!SplashMsgFont) {
 		cerr << "Unable to load name font: " << fontfile << endl;
+		SDL_Quit();
+		return;
+	}
+	fontfile = font_path + "/Clubland.ttf";
+	CountFont = TTF_OpenFont(fontfile.c_str(), 24);
+	if(!CountFont) {
+		cerr << "unable to load count font: " << fontfile << endl;
 		SDL_Quit();
 		return;
 	}
@@ -478,12 +486,16 @@ void Gui::updateTicks()
 // This is for the add new player screen.  Mainly updates webcam
 void Gui::updateNewPlayerAnimations()
 {
-	SDL_Surface *frame, *livecam;
+	SDL_Surface *frame, *livecam, *s_time;
+	SDL_Color countColor = { 186, 201, 13, 0 };
 	double xscalefactor, yscalefactor;
+	SDL_Rect clockbox, countbox;
+	char c_time[4];
 
 	/* WebCam */
 	if(cam) {
 		if(cam->hasWebCam()) {
+			// Show live feed
 			frame = cam->getFrame();
 			/* Resize Image */
 			xscalefactor = (double)addWebcam.w / (double)frame->w;
@@ -492,6 +504,22 @@ void Gui::updateNewPlayerAnimations()
 			SDL_BlitSurface(livecam, NULL, screen, &addWebcam);
 			SDL_UpdateRect(screen, addWebcam.x, addWebcam.y, addWebcam.w, addWebcam.h);
 			SDL_FreeSurface(livecam);
+			/* Update clock counter */
+			if(game->boothTimer->isActive()) {
+				clockbox.x = 565;
+				clockbox.y = 451;
+				clockbox.w = 61;
+				clockbox.h = 48;
+				SDL_BlitSurface(addnewscreen, &clockbox, screen, &clockbox);
+				snprintf(c_time, 3, "%d",game->boothTimer->getCount());
+				s_time = TTF_RenderText_Blended(CountFont, c_time, countColor);
+				countbox.x = clockbox.x+(clockbox.w/2 - s_time->w/2);
+				countbox.y = clockbox.y+(clockbox.h/2 - s_time->h/2);
+				countbox.w = s_time->w;
+				countbox.h = s_time->h;
+				SDL_BlitSurface(s_time, NULL, screen, &countbox);
+				SDL_UpdateRect(screen, clockbox.x, clockbox.y, clockbox.w, clockbox.h);
+			}
 		}
 	}
 }

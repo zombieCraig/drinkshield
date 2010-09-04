@@ -151,6 +151,7 @@ private:
   TTF_Font *NumberFont;
   TTF_Font *ListFont;
   TTF_Font *NewNameFont;
+  TTF_Font *CountFont;
   int oldticks, oldguyticks, gearticks;
   int scoreidx;
   int currentGuyFrame, guyRank;

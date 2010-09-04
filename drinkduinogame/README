@@ -13,7 +13,7 @@ Original Author: Craig Smith <craig@gfxhax.com>
 * SDL_ttf
 * SDL_gfx
 * sqlite3
-* opencv
+* opencv (libcv-dev & libhighgui-dev)
 
 == Compiling instructions ==
 ./configure
