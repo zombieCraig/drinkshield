@@ -31,6 +31,7 @@ Gui::Gui(GameData *engine)
   oldticks = 0;
   oldguyticks = 0;
   gearticks = 0;
+  selectedticks = 0;
   scoreidx = 0;
   fullscreen = 0;
   duiMode = 0;
@@ -481,6 +482,7 @@ void Gui::updateTicks()
 	oldticks = SDL_GetTicks();
 	oldguyticks = SDL_GetTicks();
 	gearticks = SDL_GetTicks();
+	selectedticks = SDL_GetTicks();
 }
 
 // This is for the add new player screen.  Mainly updates webcam
@@ -528,6 +530,14 @@ void Gui::updateNewPlayerAnimations()
 void Gui::updateAnimations()
 {
    SDL_Rect guyloc, animloc;
+
+   /* Animates the selected users pic */
+   if(selectedticks + SELECTED_FRAMERATE > SDL_GetTicks()) {
+	// Do Nothing
+   } else {
+	selectedticks = SDL_GetTicks();
+	updateSelectedPic();
+   }
 
    if(gearState > 0) {
         if(gearticks + GEAR_FRAMERATE > SDL_GetTicks()) {
@@ -704,6 +714,24 @@ void Gui::mouseover()
 	  }
 	break;
    }
+}
+
+// Update selected persons picture
+void Gui::updateSelectedPic()
+{
+  SDL_Surface *pic, *sp;
+  double xscale, yscale;
+
+  // If the profile bar has never rendered return
+  if(!mainpic.x) return;
+
+  pic = game->activePlayer->pic->nextPic();
+  xscale = (double)mainpic.w / (double)pic->w;
+  yscale = (double)mainpic.h / (double)pic->h;
+  sp = zoomSurface(pic, xscale, yscale, SMOOTHING_ON);
+  mainpic.x = screen->w / 2 - sp->w / 2;
+  SDL_BlitSurface(sp, NULL, screen, &mainpic);
+  SDL_UpdateRect(screen, mainpic.x, mainpic.y, mainpic.w, mainpic.h);
 }
 
 // Draws the profile bar
@@ -1007,11 +1035,13 @@ int Gui::addNewEvents()
 			addNewName.clear();
 			updateAddNewNamebox();
 		} else if(isover(addSmilebtn)) {
-			if(!game->boothTimer->isActive()) {
+			if(!game->boothTimer->isActive() && cam) {
+			   if(cam->hasWebCam()) {
 				game->boothTimer->setSeconds(BOOTH_START_TIME);
 				game->boothTimer->start();
 				if(verbose)
 					cout << "Timer started. Smile!" <<endl;
+			   }
 			}
 		}
 		break;

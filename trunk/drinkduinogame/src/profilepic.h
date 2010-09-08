@@ -21,6 +21,7 @@ public:
    void addPic(SDL_Surface *);
    SDL_Surface *getPic();
    SDL_Surface *firstPic();
+   SDL_Surface *nextPic();
 private:
    int oldticks;
    int frame;

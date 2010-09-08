@@ -16,7 +16,7 @@
    version="1.1"
    inkscape:version="0.47 r22583"
    sodipodi:docname="adduser1.svg"
-   inkscape:export-filename="/home/craig/dev/gfxhax/drinkduino++/data/images/addUser1.png"
+   inkscape:export-filename="/home/craig/dev/gfxhax/drinkduino++/src/addUser1.png"
    inkscape:export-xdpi="90"
    inkscape:export-ydpi="90">
   <defs
@@ -162,24 +162,31 @@
        r="34.36139"
        gradientTransform="matrix(-0.56168345,0.17604623,-1.1334575,-0.88123355,2015.0804,1665.8041)"
        gradientUnits="userSpaceOnUse" />
+    <inkscape:perspective
+       id="perspective3125"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
   </defs>
   <sodipodi:namedview
      id="base"
      pagecolor="#000000"
      bordercolor="#666666"
      borderopacity="1.0"
-     inkscape:pageopacity="1"
+     inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.84166667"
      inkscape:cx="158.21783"
      inkscape:cy="300"
      inkscape:document-units="px"
-     inkscape:current-layer="layer1"
+     inkscape:current-layer="layer2"
      showgrid="false"
      inkscape:snap-global="false"
      inkscape:window-width="1280"
      inkscape:window-height="752"
-     inkscape:window-x="-15"
+     inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="1" />
   <metadata
@@ -365,5 +372,18 @@
          id="tspan3647"
          x="260.58731"
          y="989.13831">Cancel</tspan></text>
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer2"
+     inkscape:label="Picutre"
+     sodipodi:insensitive="true">
+    <image
+       y="86.732681"
+       x="242.77228"
+       id="image3127"
+       height="240"
+       width="320"
+       xlink:href="file:///home/craig/dev/gfxhax/drinkshield/trunk/drinkduinogame/src/art/tv-2.jpg" />
   </g>
 </svg>

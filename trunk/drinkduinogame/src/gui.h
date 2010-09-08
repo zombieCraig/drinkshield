@@ -58,6 +58,7 @@
 #define HOVER_FRAMERATE 2000
 #define GUY_FRAMERATE   62
 #define GEAR_FRAMERATE  74
+#define SELECTED_FRAMERATE 1000
 #define ABORT_UP 0
 #define ABORT_OVER 1
 #define ABORT_DOWN 2
@@ -86,7 +87,7 @@ public:
   string addNewName, addNewPicPath;
   GameData *game;
   SDL_Surface *screen, *playerscreen, *addnewscreen;
-  int state, gearState, abortState,;
+  int state, gearState, abortState;
   int duiMode;
 
   int splashScreen();
@@ -121,6 +122,7 @@ public:
   void disableCamera();
   void updateNewPlayerAnimations();
   void updateSnapshots();
+  void updateSelectedPic();
   TTF_Font *getListFont();
   SDL_Surface *createBlankSurface(int,int);
   SDL_Surface *loadImage(const char *);
@@ -152,7 +154,7 @@ private:
   TTF_Font *ListFont;
   TTF_Font *NewNameFont;
   TTF_Font *CountFont;
-  int oldticks, oldguyticks, gearticks;
+  int oldticks, oldguyticks, gearticks, selectedticks;
   int scoreidx;
   int currentGuyFrame, guyRank;
 };
