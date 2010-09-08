@@ -7,7 +7,6 @@
 
 ProfilePic::ProfilePic()
 {
-	oldticks = SDL_GetTicks();
 	frame = 0;
 }
 
@@ -38,23 +37,16 @@ void ProfilePic::addPic(SDL_Surface *newpic)
 
 void ProfilePic::nextFrame()
 {
-	if(oldticks + PIC_FRAMERATE > SDL_GetTicks()) {
-		oldticks = SDL_GetTicks();
-		frame++;
-		if(frame >= pics.size())
-			frame = 0;
-	}
+	frame++;
+	if(frame >= pics.size())
+		frame = 0;
 }
 
 SDL_Surface *ProfilePic::getPic()
 {
-	int cnt = pics.size();
-	if(cnt == 0)
+	if(pics.size() == 0)
 		return NULL;
-	if(cnt == 1)
-		return pics.front();
-	nextFrame();
-	return pics.at(frame);
+	return pics.front();
 }
 
 SDL_Surface *ProfilePic::firstPic()
@@ -62,4 +54,10 @@ SDL_Surface *ProfilePic::firstPic()
 	if(pics.size() == 0)
 		return NULL;
 	return pics.front();
+}
+
+SDL_Surface *ProfilePic::nextPic()
+{
+	nextFrame();
+	return pics.at(frame);
 }
