@@ -1,0 +1,27 @@
+/*
+ * Basic CSS for GfxHax DrinkDuino Leaderboard
+ *
+ */
+
+td {
+  border: 1px solid #black;
+}
+
+#score-table {
+  width:100%;
+  border-collapse:collapse;
+  border: 1px solid #black;
+}
+
+#table-title {
+  background-color: #yellow;
+}
+
+#row:hover {
+  background-color: #ccc;
+}
+
+#rank {
+  text-align:center;
+}
+

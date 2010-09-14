@@ -238,7 +238,12 @@ void GameData::recordResults()
 	if(s->dev->readBuf().compare(0,5,"Blow!") == 0) {
 		setPlayerReady(ON);
 	} else {
-		cerr << "Err: DEV_Ready did not recieve normal response: " << s->dev->readBuf() << endl;
+		s->dev->read_until('\n'); // Try again
+		if(s->dev->readBuf().compare(0,5,"Blow!") == 0) {
+			setPlayerReady(ON);
+		} else {
+			cerr << "Err: DEV_Ready did not recieve normal response: " << s->dev->readBuf() << endl;
+		}
 		return;
 	}
     }
