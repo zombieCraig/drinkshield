@@ -375,7 +375,6 @@ void Gui::drawGear()
    	SDL_BlitSurface(maindlg, &gearLoc, screen, &gearLoc);
    	// Update Gear
    	SDL_BlitSurface(configgear, &gear, screen, &gearLoc);
-   	SDL_UpdateRect(screen, gearLoc.x, gearLoc.y, gearLoc.w, gearLoc.h);
 }
 
 // Draws the Abort play button
@@ -389,7 +388,6 @@ void Gui::drawAbort()
 	abort.h = abortLoc.h;
 
 	SDL_BlitSurface(abortbtn, &abort, screen, &abortLoc);
-	SDL_UpdateRect(screen, abortLoc.x, abortLoc.y, abortLoc.w, abortLoc.h);
 }
 
 // Draw add friend button
@@ -407,7 +405,17 @@ void Gui::drawFriendIcon()
 
 	SDL_BlitSurface(maindlg, &friendLoc, screen, &friendLoc);
 	SDL_BlitSurface(friendbtn, &friendbox, screen, &friendLoc);
-	SDL_UpdateRect(screen, friendLoc.x, friendLoc.y, friendLoc.w, friendLoc.h);
+}
+
+// Draw the score dialog
+void Gui::drawScoreDlg()
+{
+	if(state == STATE_SCORE_UP ||
+	   state == STATE_SCORE_DOWN ||
+	   state == STATE_SCORE_HOVER ) {
+		SDL_BlitSurface(newscore, NULL, screen, &scorenow);
+		updateGuyAnim(true);
+	}
 }
 
 // Sets dancing guys ranking
@@ -420,7 +428,7 @@ void Gui::setGuyRank(int r)
 void Gui::newScore(int score)
 {
 	char buf[25];
-	SDL_Color scorecolor = { 0x33, 0xcf, 0x30, 0xff };
+	SDL_Color scorecolor = { 0xff, 0xff, 0xff, 0xff };
 	SDL_Surface *scoretxt;
 	SDL_Rect loc;
 
@@ -452,13 +460,11 @@ void Gui::redraw()
    case STATE_ADD_NEW_SCREEN:
 	SDL_BlitSurface(addnewscreen, NULL, screen, NULL);
 	updateAddNewNamebox();
-	SDL_Flip(screen);
 	break;
    case STATE_ADD_PLAYERS_SCREEN:
 	SDL_BlitSurface(playerscreen, NULL, screen, NULL);
 	if(game->allPlayersBox) game->allPlayersBox->redraw();
 	if(game->addPlayersBox) game->addPlayersBox->redraw();
-	SDL_Flip(screen);
 	break;
    case STATE_MAIN_SCREEN:
    case STATE_SCORE_UP:
@@ -469,11 +475,45 @@ void Gui::redraw()
 	drawAbort();
 	drawFriendIcon();
 	drawPlayerInfo();
-	SDL_Flip(screen);
+	drawScoreDlg();
 	break;
    default:
 	cerr << "redraw() unknown state: " << state << endl;
    }
+   if(SDL_Flip(screen) != 0)
+	cerr << "Could not flip screen during main redraw" << endl;
+}
+
+void Gui::updateGuyAnim(bool redrawguy)
+{
+        SDL_Rect guyloc, animloc;
+
+       	guyloc.x = scorenow.x+40;
+        guyloc.y = scorenow.y+25;
+        guyloc.w = GUY_FRAME_W;
+        guyloc.h = GUY_FRAME_H;
+        animloc.w = GUY_FRAME_W;
+        animloc.h = GUY_FRAME_H;
+        animloc.x = GUY_FRAME_W * currentGuyFrame;
+        animloc.y = GUY_FRAME_H * guyRank;
+
+        if(oldguyticks + GUY_FRAMERATE > SDL_GetTicks()) {
+		if(redrawguy) {
+			if(state == STATE_SCORE_HOVER) 
+				SDL_BlitSurface(newscore, NULL, screen, &scorenow);
+	                SDL_BlitSurface(guyanim, &animloc, screen, &guyloc);
+		}
+        } else {
+                oldguyticks = SDL_GetTicks();
+
+		SDL_BlitSurface(newscore, NULL, screen, &scorenow);
+                SDL_BlitSurface(guyanim, &animloc, screen, &guyloc);
+
+                currentGuyFrame++;
+                if(currentGuyFrame >= GUY_FRAMES)
+                        currentGuyFrame = 0;
+        }
+
 }
 
 // Update clock ticks
@@ -529,7 +569,7 @@ void Gui::updateNewPlayerAnimations()
 // Update any animations on the screen
 void Gui::updateAnimations()
 {
-   SDL_Rect guyloc, animloc;
+   bool updated = false;
 
    /* Animates the selected users pic */
    if(selectedticks + SELECTED_FRAMERATE > SDL_GetTicks()) {
@@ -537,6 +577,8 @@ void Gui::updateAnimations()
    } else {
 	selectedticks = SDL_GetTicks();
 	updateSelectedPic();
+	drawScoreDlg(); // Just in case
+	updated = true;
    }
 
    if(gearState > 0) {
@@ -547,12 +589,13 @@ void Gui::updateAnimations()
                 gearState++;
                 if(gearState > 3) gearState = 1;
                 drawGear();
+		updated = true;
         }
    }
 
    if(state == STATE_SCORE_UP) {
         if(oldticks + SCORE_FRAMERATE > SDL_GetTicks()) {
-                // Do Nothing
+		updateGuyAnim(false);
         } else {
                 oldticks = SDL_GetTicks();
                 // Erase old box
@@ -560,17 +603,21 @@ void Gui::updateAnimations()
                 scorenow.y-=3;
                 if(scorenow.y <= scoredst.y)
                         state = STATE_SCORE_HOVER;
+                SDL_BlitSurface(newscore, NULL, screen, &scorenow);
+		updateGuyAnim(true);
+		updated = true;
         }
   } else if (state == STATE_SCORE_HOVER) {
         if(oldticks + HOVER_FRAMERATE > SDL_GetTicks()) {
-                // Do Nothing
+		updateGuyAnim(false);
+		updated = true;
         } else {
                 oldticks = SDL_GetTicks();
                 state = STATE_SCORE_DOWN;
         }
   }else if (state == STATE_SCORE_DOWN) {
         if(oldticks + SCORE_FRAMERATE > SDL_GetTicks()) {
-                // Do Nothing
+		updateGuyAnim(false);
         } else {
                 oldticks = SDL_GetTicks();
                 SDL_BlitSurface(scrap, &scorenow, screen, &scorenow);
@@ -579,35 +626,16 @@ void Gui::updateAnimations()
                         state = STATE_MAIN_SCREEN;
                         redraw();
                 }
-        }
-
-  }
-
-  // Score Guy Animiations
-  if(state == STATE_SCORE_UP || state == STATE_SCORE_DOWN || state == STATE_SCORE_HOVER) {
-        if(oldguyticks + GUY_FRAMERATE > SDL_GetTicks()) {
-                // Do Nothing
-        } else {
-                oldguyticks = SDL_GetTicks();
-                guyloc.x = scorenow.x+40;
-                guyloc.y = scorenow.y+25;
-                guyloc.w = GUY_FRAME_W;
-                guyloc.h = GUY_FRAME_H;
-                animloc.w = GUY_FRAME_W;
-                animloc.h = GUY_FRAME_H;
-                animloc.x = GUY_FRAME_W * currentGuyFrame;
-                animloc.y = GUY_FRAME_H * guyRank;
-                // Erase last guy pic
                 SDL_BlitSurface(newscore, NULL, screen, &scorenow);
-                //SDL_BlitSurface(scoredlg, &guyloc, screen, &guyloc);
-                SDL_BlitSurface(guyanim, &animloc, screen, &guyloc);
-                SDL_Flip(screen);
-
-                currentGuyFrame++;
-                if(currentGuyFrame >= GUY_FRAMES)
-                        currentGuyFrame = 0;
+		updateGuyAnim(true);
+		updated = true;
         }
+
   }
+
+  if(updated)
+	if(SDL_Flip(screen) != 0)
+		cerr << "Could not flip screen during animation" << endl;
 
 }
 
@@ -657,7 +685,6 @@ void Gui::light(SDL_Rect b, int state)
   } else {
     SDL_BlitSurface(maindlg, &b, screen, &b);
   }
-  SDL_UpdateRect(screen, b.x, b.y, b.w, b.h);
 }
 
 // Toggles the player lights
@@ -688,30 +715,33 @@ void Gui::mouseover()
   case STATE_ADD_PLAYERS_SCREEN:
 	break;
   case STATE_MAIN_SCREEN:
-	  if(isover(leftArrow)) {
+	  if(isover(leftArrow)) 
 	    light(leftArrow, ON);
-	  } else if (isover(rightArrow)) {
+	  else
+	    light(leftArrow, OFF);
+	  if (isover(rightArrow)) 
 	    light(rightArrow, ON);
-	  } else if (isover(gearLoc)) {
+	  else
+	    light(rightArrow, OFF);
+	  if (isover(gearLoc)) {
 	    gearState++;
 	    if(gearState > 3) gearState = 1;
 	    drawGear();
-	  } else if (isover(abortLoc)) {
+	  } else {
+	    gearState = 0;
+	    drawGear();
+	  }
+	  if (isover(abortLoc)) {
 	    if(abortState != ABORT_DOWN) {
 	            abortState = ABORT_OVER;
 	            drawAbort();
 	    }
-	  } else { // Over nothing
-	    light(leftArrow, OFF);
-	    light(rightArrow, OFF);
-	    gearState = 0;
-	    drawGear();
-	    drawFriendIcon();
-	    if(abortState != ABORT_DOWN) {
+	  } else if(abortState != ABORT_DOWN) {
 	            abortState = ABORT_UP;
 	            drawAbort();
-	    }
 	  }
+	drawFriendIcon();
+   	SDL_Flip(screen);
 	break;
    }
 }
@@ -731,8 +761,27 @@ void Gui::updateSelectedPic()
   sp = zoomSurface(pic, xscale, yscale, SMOOTHING_ON);
   mainpic.x = screen->w / 2 - sp->w / 2;
   SDL_BlitSurface(sp, NULL, screen, &mainpic);
-  SDL_UpdateRect(screen, mainpic.x, mainpic.y, mainpic.w, mainpic.h);
+  SDL_BlitSurface(sp, NULL, scrap, &mainpic); // For overlay animations
 }
+
+// Redraw selected persons picture
+void Gui::redrawSelectedPic()
+{
+  SDL_Surface *pic, *sp;
+  double xscale, yscale;
+
+  // If the profile bar has never rendered return
+  if(!mainpic.x) return;
+
+  pic = game->activePlayer->pic->getPic();
+  xscale = (double)mainpic.w / (double)pic->w;
+  yscale = (double)mainpic.h / (double)pic->h;
+  sp = zoomSurface(pic, xscale, yscale, SMOOTHING_ON);
+  mainpic.x = screen->w / 2 - sp->w / 2;
+  SDL_BlitSurface(sp, NULL, screen, &mainpic);
+  SDL_BlitSurface(sp, NULL, scrap, &mainpic);
+}
+
 
 // Draws the profile bar
 void Gui::updateProfileBar()
@@ -831,7 +880,7 @@ void Gui::updateProfileBar()
   status.w = screen->w - status.x;
   SDL_BlitSurface(maindlg, &status, screen, &status);
 
-  SDL_Flip(screen);
+  //SDL_Flip(screen);
 }
 
 // Updates the players statusbar and scores and any other info
@@ -860,10 +909,8 @@ void Gui::drawPlayerInfo()
     namebox.h = NameText->h;
 
     SDL_BlitSurface(maindlg, &titlearea, screen, &titlearea);
-    SDL_UpdateRect(screen, namebox.x, namebox.y, namebox.w, namebox.h);
 
     SDL_BlitSurface(NameText, NULL, screen, &namebox);
-    SDL_UpdateRect(screen, namebox.x, namebox.y, namebox.w, namebox.h);
 
     // Score
     scorearea.x = 166;
@@ -872,7 +919,6 @@ void Gui::drawPlayerInfo()
     scorearea.h = 180;
 
     SDL_BlitSurface(maindlg, &scorearea, screen, &scorearea);
-    SDL_UpdateRect(screen, scorearea.x, scorearea.y, scorearea.w, scorearea.h);
 
     // Top 3 scores
     if(game->activePlayer->scores.size() == 0) {
@@ -882,7 +928,6 @@ void Gui::drawPlayerInfo()
 	scorebox.w = ScoreText->w;
 	scorebox.h = ScoreText->h;
 	SDL_BlitSurface(ScoreText, NULL, screen, &scorebox);
-	SDL_UpdateRect(screen, scorebox.x, scorebox.y, scorebox.w, scorebox.h);
     } else {
 	// Display the top 3 scores
 	s = game->activePlayer->FirstScore(0);
@@ -897,7 +942,6 @@ void Gui::drawPlayerInfo()
 		scorebox.w = ScoreText->w;
 		scorebox.h = ScoreText->h;
 		SDL_BlitSurface(ScoreText, NULL, screen, &scorebox);
-		SDL_UpdateRect(screen, scorebox.x, scorebox.y, scorebox.w, scorebox.h);
 
 	}
 	s = game->activePlayer->SecondScore(0);
@@ -912,7 +956,6 @@ void Gui::drawPlayerInfo()
 		scorebox.w = ScoreText->w;
 		scorebox.h = ScoreText->h;
 		SDL_BlitSurface(ScoreText, NULL, screen, &scorebox);
-		SDL_UpdateRect(screen, scorebox.x, scorebox.y, scorebox.w, scorebox.h);
 
 	}
 	s = game->activePlayer->ThirdScore(0);
@@ -927,7 +970,6 @@ void Gui::drawPlayerInfo()
 		scorebox.w = ScoreText->w;
 		scorebox.h = ScoreText->h;
 		SDL_BlitSurface(ScoreText, NULL, screen, &scorebox);
-		SDL_UpdateRect(screen, scorebox.x, scorebox.y, scorebox.w, scorebox.h);
 	}
     }
     updateProfileBar();

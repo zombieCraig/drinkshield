@@ -101,9 +101,11 @@ public:
   void drawAbort();
   void drawFriendIcon();
   void drawPlayerInfo();
+  void drawScoreDlg();
   void newScore(int);
   void setGuyRank(int);
   void updateTicks();
+  void updateGuyAnim(bool);
   void updateAnimations();
   void light(SDL_Rect, int);
   void togglePlayerLights(int);
@@ -123,6 +125,7 @@ public:
   void updateNewPlayerAnimations();
   void updateSnapshots();
   void updateSelectedPic();
+  void redrawSelectedPic();
   TTF_Font *getListFont();
   SDL_Surface *createBlankSurface(int,int);
   SDL_Surface *loadImage(const char *);

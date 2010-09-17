@@ -46,7 +46,7 @@ SDL_Surface *ProfilePic::getPic()
 {
 	if(pics.size() == 0)
 		return NULL;
-	return pics.front();
+	return pics.at(frame);
 }
 
 SDL_Surface *ProfilePic::firstPic()
