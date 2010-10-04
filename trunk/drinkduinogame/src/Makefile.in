@@ -52,7 +52,7 @@ am_drinkduino_OBJECTS = drinkduino.$(OBJEXT) serial.$(OBJEXT) \
 	sql.$(OBJEXT) gui.$(OBJEXT) gamedata.$(OBJEXT) \
 	drinkshield.$(OBJEXT) player.$(OBJEXT) score.$(OBJEXT) \
 	scrollbar.$(OBJEXT) profilepic.$(OBJEXT) camera.$(OBJEXT) \
-	countdowntimer.$(OBJEXT)
+	countdowntimer.$(OBJEXT) event.$(OBJEXT)
 drinkduino_OBJECTS = $(am_drinkduino_OBJECTS)
 drinkduino_LDADD = $(LDADD)
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
@@ -170,11 +170,12 @@ top_srcdir = @top_srcdir@
 INCLUDES = -I$(top_builddir) -I$(top_srcdir)
 drinkduino_SOURCES = drinkduino.cpp serial.cpp sql.cpp gui.cpp \
 		gamedata.cpp drinkshield.cpp player.cpp score.cpp \
-		scrollbar.cpp profilepic.cpp camera.cpp countdowntimer.cpp
+		scrollbar.cpp profilepic.cpp camera.cpp countdowntimer.cpp \
+		event.cpp
 
 noinst_HEADERS = drinkduino.h serial.h sql.h gui.h gamedata.h \
 		drinkshield.h player.h score.h scrollbar.h profilepic.h \
-		camera.h countdowntimer.h
+		camera.h countdowntimer.h event.h
 
 all: all-am
 
@@ -261,6 +262,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/countdowntimer.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/drinkduino.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/drinkshield.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/event.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gamedata.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gui.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/player.Po@am__quote@
