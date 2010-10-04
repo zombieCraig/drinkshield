@@ -1,0 +1,21 @@
+Source: drinkduinogame
+Section: games
+Priority: optional
+Maintainer: Craig Smith <craig@gfxhax.com>
+Build-Depends: debhelper (>= 7.0.50~), autotools-dev, libsdl1.2-dev,libsdl1.2debian-alsa, libvorbis0a, locales, libfreetype6, libopenjpeg2, libjpeg62, libsdl-ttf2.0-dev, libsdl-image1.2-dev, libsdl-gfx1.2-dev, libsqlite3-dev, libcv-dev, libhighgui-dev
+Standards-Version: 3.8.4
+Homepage: http://www.gfxhax.com/drinkshield/gfxhax-drinkduino/
+Vcs-Svn: svn://drinkshield.googlecode.com/svn/trunk/drinkduinogame
+Vcs-Browser: http://drinkshield.googlecode.com/svn/trunk/drinkduinogame
+
+Package: drinkduinogame
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Breathalyzer drinking game for Arduino DrinkShields
+  This is a drinking game designed to work with the GfxHax Drink Shields
+  (http://www.gfxhax.com/drinkshield/)  Any breathalyzer that follows
+  the drink shield protocol should work.
+  .
+  Game communicates of USB to an arduino with the DrinkShield attached and
+  configured with the DrinkDuinoGame firmware.  A webcam is recommended.
+
