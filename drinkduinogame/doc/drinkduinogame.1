@@ -1,0 +1,25 @@
+.\" Just a base file for now.  Originally generated from help2man. --Craig
+.TH DRINKDUINOGAME "1" "October 2010" "DrinkDuinoGame" "User Commands"
+.SH NAME
+drinkduinogame \-  Open Source Breahtalyzer game
+.SH SYNOPSIS
+.B drinkduinogame
+\fI<options>\fR
+.SH DESCRIPTION
+.PP
+DrinkDuinoGame is an open source breathalyzer game designed to work with the GfxHax DrinkShield for Arduino.  See 
+.B http://www.gfxhax.com/
+For more information.  Load the DrinkDuinoGame firmware into the arduino after attaching the DrinkShield.  Connect a USB cable from the arduino to the computer then start the game.  This version supports an attached webcam as well.
+.TP
+\fB\-h\fR|\-\-help
+This usage message
+.HP
+\fB\-p\fR|\-\-port <serial> Serial port. Default: /dev/ttyUSB0
+.TP
+\fB\-e\fR|\-\-emulate
+Emulate a drinkShield (debug mode)
+.TP
+\fB\-f\fR|\-\-fullscreen
+Initialize in fullscreen mode
+.SH "AUTHOR"
+Craig Smith <craig@gfxhax.com>
