@@ -168,6 +168,7 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 INCLUDES = -I$(top_builddir) -I$(top_srcdir)
+drinkduinogamedir = $(data_path)
 drinkduino_SOURCES = drinkduino.cpp serial.cpp sql.cpp gui.cpp \
 		gamedata.cpp drinkshield.cpp player.cpp score.cpp \
 		scrollbar.cpp profilepic.cpp camera.cpp countdowntimer.cpp \
