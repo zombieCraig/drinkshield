@@ -38,8 +38,12 @@ float DrinkShield::pollVersion()
 	dev->write_str(DEV_INIT);
 	if(dev->read_until('\n') == 0) {
 		buf = dev->readBuf();
+        if(buf.size() == 0) {
+            cerr << "ERR: No data returned will polling version info" << endl;
+            return 0;
+        }
 		if(verbose >= 2)
-			cout << "Buffer: " << buf << endl;
+			    cout << "Buffer: " << buf << endl;
 		string id(buf, 0, 11);
 		string ver(buf, 13); 
 		if(id.compare("drinkShield") == 0) {
