@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.65])
-AC_INIT([drinkduino], [0.1], [craig@gfxhax.com],[drinkduino],[http://www.gfxhax.com/])
+AC_INIT([drinkduinogame], [0.1], [craig@gfxhax.com],[drinkduinogame],[http://www.gfxhax.com/])
 AC_CONFIG_AUX_DIR([config])
 AC_CONFIG_MACRO_DIR([config])
 AM_INIT_AUTOMAKE([foreign])
