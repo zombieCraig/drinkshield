@@ -21,6 +21,8 @@
 #define DEV_LIGHTS 'l'
 #define DEV_ABORT 'A'
 
+#define MAX_BUFFER_READ 256
+
 using namespace std;
 
 class Serial
@@ -47,7 +49,7 @@ private:
    int baudrate;
    const char *port;
    int serialfd;
-   string readbuf;
+   string _readbuf;
 };
 
 #endif /* __SERIAL_H__ */

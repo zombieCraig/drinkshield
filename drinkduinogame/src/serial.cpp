@@ -115,10 +115,10 @@ int Serial::write_str(const char *data)
    if(emulated) {
 	switch(data[0]) {
 	case DEV_INIT:
-		readbuf = "drinkShield v0.2";
+		_readbuf = string("drinkShield v0.2");
 		break;
 	case DEV_READY:
-		readbuf = "Blow!";
+		_readbuf = "Blow!";
 		break;
 	case DEV_ABORT:
 	case DEV_RECAL:
@@ -161,7 +161,7 @@ int Serial::read_until(char byte)
 
     if(serialfd <= 0 || emulated)
         return 0;
-    readbuf.clear();
+    _readbuf.clear();
     b[1] = 0;
     do {
         int n = read(serialfd, b, 1);  // read a char at a time
@@ -173,7 +173,12 @@ int Serial::read_until(char byte)
             usleep( 10 * 1000 ); // wait 10 msec try again
             continue;
         }
-	readbuf += string(b);
+	_readbuf += string(b);
+    if(_readbuf.size() > MAX_BUFFER_READ) {
+        cerr << "ERR: read in an abnormal amount of data without reaching terminator" << endl;
+        _readbuf.clear();
+        return 0;
+     }
     } while( b[0] != byte );
 
     return 0;
@@ -181,7 +186,7 @@ int Serial::read_until(char byte)
 
 string Serial::readBuf()
 {
-   return readbuf;
+   return _readbuf;
 }
 
 // Generates a random score.  Used by emulate mode
@@ -189,5 +194,5 @@ void Serial::randomScore()
 {
    char buf[10];
    snprintf(buf, 10, "%d", rand() % 230 + 20);
-   readbuf = buf;
+   _readbuf = buf;
 }
