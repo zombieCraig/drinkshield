@@ -84,7 +84,10 @@ AC_MSG_RESULT([$use_debug])
 CFLAGS="$CFLAGS $SDL_CFLAGS"
 LIBS="$LIBS $SDL_LIBS"
 
-AC_OUTPUT(Makefile src/Makefile)
+AC_SUBST([data_path])
+
+AC_CONFIG_FILES([Makefile src/Makefile data/Makefile data/images/Makefile data/fonts/Makefile])
+AC_OUTPUT
 
 echo
 AC_MSG_NOTICE([data path:          $data_path])
