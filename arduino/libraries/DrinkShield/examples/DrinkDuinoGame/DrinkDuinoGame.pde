@@ -21,9 +21,9 @@ int gotTopResult = 0;  // Used for instant response to system
 
 void setup()
 {
-  // Initial Serial Port
-  Serial.begin(9600);
-  // Take 20 air samples when we first turn on the system
+ // Initial Serial Port
+ Serial.begin(9600);
+ // Take 20 air samples when we first turn on the system
  ds.autocalibrate(20);
  // We initialize all the lights, reset them to ff
  ds.lightBarLevel(0, 0);

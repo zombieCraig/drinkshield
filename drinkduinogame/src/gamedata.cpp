@@ -79,6 +79,7 @@ int GameData::init_drinkShields()
 				cout << endl;
 			}
 			shield->emulated = shield->dev->emulated;
+                        shield->stillAlive();
 			detected++;
 			gui->splashShields(detected);
 			addShield(shield);
@@ -643,6 +644,9 @@ int GameData::mainLoop()
 {
   int running = 1;
   int result;
+  time_t lastAlive = 0; // last time a Still Alive signal was sent
+  DrinkShield *s;
+
   gui->updateTicks();
 
   while(running) {
@@ -680,6 +684,15 @@ int GameData::mainLoop()
 	default:
 		cerr << "Unkown game state in mainLoop() " << gameState << endl;
 	}
+
+        // Send a Still Alive signal to all connected boards once a second
+        if((time(NULL)-lastAlive) >= 1)
+        {
+                for(vector<DrinkShield *>::iterator it = shields.begin(); it != shields.end() && (s = *it); ++ it) {
+                       s->stillAlive();
+                }
+        }
+
   }
   return running;
 }
