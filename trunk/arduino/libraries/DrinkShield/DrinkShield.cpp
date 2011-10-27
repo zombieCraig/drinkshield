@@ -33,6 +33,7 @@ DrinkShield::DrinkShield(int major, int minor)
 	}
         break;
     }
+   lastAlive = 0;
 }
 
 // Updates all the lights
@@ -153,6 +154,9 @@ void DrinkShield::pollSerial()
 			playerReady = 0;
 			setPlayerLights(ON, OFF);
 			break;
+                case 'S':
+                        lastAlive = millis();
+                        break;
 		}
 	}
 }

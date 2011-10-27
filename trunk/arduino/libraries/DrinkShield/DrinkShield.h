@@ -12,12 +12,16 @@
 const int ON = 1;
 const int OFF = 0;
 
+const int STANDALONE = 1;
+const int DRINKDUINO = 0;
+
 class DrinkShield
 {
   public:
 	DrinkShield(int, int);
 	char *version;
 	int playerReady;
+        unsigned long lastAlive;
 	void refreshLights();
 	void updatePlayerLights();
 	void setPlayerLights(int, int);
