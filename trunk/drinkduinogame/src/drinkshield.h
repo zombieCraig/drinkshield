@@ -25,6 +25,7 @@ public:
 
   void setVerbose(int);
   float pollVersion();
+  void stillAlive();
   float version;
 };
 

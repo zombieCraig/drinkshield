@@ -58,3 +58,11 @@ float DrinkShield::pollVersion()
 	}
 	return 0;
 }
+
+// Send a command over serial to the arduino/drinkshield to inform it that it is still attached to a computer
+void DrinkShield::stillAlive()
+{
+    dev->write_str(DEV_ALIVE);
+    if(verbose)
+        cout << "Sending Still Alive signal." << endl;
+}
