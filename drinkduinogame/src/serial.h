@@ -20,6 +20,7 @@
 #define DEV_RECAL 'a'
 #define DEV_LIGHTS 'l'
 #define DEV_ABORT 'A'
+#define DEV_ALIVE 'S'
 
 #define MAX_BUFFER_READ 256
 
