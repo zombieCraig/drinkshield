@@ -7,7 +7,11 @@
 #ifndef DrinkShield_h
 #define DrinkShield_h
 
-#include "WProgram.h"
+#if defined(ARDUINO) && ARDUINO >= 100
+  #include "Arduino.h"
+#else
+  #include "WProgram.h"
+#endif
 
 const int ON = 1;
 const int OFF = 0;
