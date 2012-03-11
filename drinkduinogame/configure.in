@@ -1,3 +1,7 @@
+                                                                     
+                                                                     
+                                                                     
+                                             
 #                                               -*- Autoconf -*-
 # Process this file with autoconf to produce a configure script.
 
@@ -37,6 +41,7 @@ AM_PATH_SDL([1.2.0], [], [
 AC_CHECK_HEADER([SDL/SDL_rotozoom.h], [], [AC_MSG_ERROR([Missing SDL_rotozoom.  Please install libsdl-gfx1.2-dev])])
 AC_CHECK_HEADER([opencv/cv.h], [], [AC_MSG_ERROR([Missing OpenCV headers.  Please install libcv-dev])])
 AC_CHECK_HEADER([opencv/highgui.h], [], [AC_MSG_ERROR([Missing OpenCV HighGUI headers.  Please install libhighgui-dev])])
+AC_CHECK_HEADER([sqlite3.h], [], [AC_MSG_ERROR([Missing SQLite3 headers.  Please install libsqlite3-dev])])
 AC_CHECK_HEADERS([fcntl.h stdlib.h string.h sys/ioctl.h termios.h unistd.h])
 
 # Checks for typedefs, structures, and compiler characteristics.
@@ -82,7 +87,7 @@ AS_IF([test "$use_debug" = "yes" || test "$use_debug" = "full"], [
 AC_MSG_RESULT([$use_debug])
 
 CFLAGS="$CFLAGS $SDL_CFLAGS"
-LIBS="$LIBS $SDL_LIBS"
+LIBS="$LIBS $SDL_LIBS -lsqlite3"
 
 AC_SUBST([data_path])
 
