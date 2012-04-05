@@ -686,12 +686,14 @@ int GameData::mainLoop()
 	}
 
         // Send a Still Alive signal to all connected boards once a second
+        /*
         if((time(NULL)-lastAlive) >= 1)
         {
                 for(vector<DrinkShield *>::iterator it = shields.begin(); it != shields.end() && (s = *it); ++ it) {
                        s->stillAlive();
                 }
         }
+        */
 
   }
   return running;
