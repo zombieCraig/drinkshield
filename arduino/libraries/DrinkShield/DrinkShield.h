@@ -25,6 +25,7 @@ class DrinkShield
 	DrinkShield(int, int);
 	char *version;
 	int playerReady;
+        int streamResults;
         unsigned long lastAlive;
 	void refreshLights();
 	void updatePlayerLights();

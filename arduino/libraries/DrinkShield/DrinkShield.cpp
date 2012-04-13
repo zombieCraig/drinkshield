@@ -23,6 +23,7 @@ DrinkShield::DrinkShield(int major, int minor)
 
 		_highscore = 0;
 		playerReady = 0;
+                streamResults = 0;
 		_baseline = 70;
 		_startTime = 0;
 
@@ -159,6 +160,9 @@ void DrinkShield::pollSerial()
 			playerReady = 0;
 			setPlayerLights(ON, OFF);
 			break;
+                case 's':      // Constant MQ-3 stream results
+                        streamResults = 1;
+                        break;
                 case 'S':
                         lastAlive = millis();
                         break;

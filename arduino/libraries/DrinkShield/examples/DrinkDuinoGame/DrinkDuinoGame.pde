@@ -61,6 +61,11 @@ void loop()
       }
       // Display light level
       ds.lightBarLevel(lightLevel, highscoreLed);
+      // If constant streams are enable then print results
+      if (ds.streamResults) {
+        Serial.print(val, DEC);
+        Serial.println;
+      }
     } else if(highscore) {
      // A highscore has been set so we had a reading, we are done
      ds.lightBarLevel(0, highscoreLed);
