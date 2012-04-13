@@ -166,6 +166,42 @@ void DrinkShield::pollSerial()
                 case 'S':
                         lastAlive = millis();
                         break;
+                case '0':
+                        lightBarLevel(0, 0);
+                        break;
+                case '1':
+                        lightBarLevel(1, 0);
+                        break;
+                case '2':
+                        lightBarLevel(2, 0);
+                        break;
+                case '3':
+                        lightBarLevel(3, 0);
+                        break;
+                case '4':
+                        lightBarLevel(4, 0);
+                        break;
+                case '5':
+                        lightBarLevel(5, 0);
+                        break;
+                case '6':
+                        lightBarLevel(6, 0);
+                        break;
+                case '7':
+                        lightBarLevel(7, 0);
+                        break;
+                case '8':
+                        lightBarLevel(8, 0);
+                        break;
+                case '9':
+                        lightBarLevel(9, 0);
+                        break;
+                case ':':
+                        lightBarLevel(10, 0);
+                        break;
+                case ';':
+                        lightBarLevel(11, 0);
+                        break;
 		}
 	}
 }

@@ -5210,6 +5210,14 @@ else
 fi
 
 
+ac_fn_c_check_header_mongrel "$LINENO" "sqlite3.h" "ac_cv_header_sqlite3_h" "$ac_includes_default"
+if test "x$ac_cv_header_sqlite3_h" = x""yes; then :
+
+else
+  as_fn_error $? "Missing SQLite3 headers.  Please install libsqlite3-dev" "$LINENO" 5
+fi
+
+
 for ac_header in fcntl.h stdlib.h string.h sys/ioctl.h termios.h unistd.h
 do :
   as_ac_Header=`$as_echo "ac_cv_header_$ac_header" | $as_tr_sh`
@@ -5479,7 +5487,7 @@ fi
 $as_echo "$use_debug" >&6; }
 
 CFLAGS="$CFLAGS $SDL_CFLAGS"
-LIBS="$LIBS $SDL_LIBS"
+LIBS="$LIBS $SDL_LIBS -lsqlite3"
 
 
 
