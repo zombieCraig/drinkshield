@@ -24,6 +24,7 @@ DrinkShield::DrinkShield(int major, int minor)
 		_highscore = 0;
 		playerReady = 0;
                 streamResults = 0;
+                outputLightLevel = 0;
 		_baseline = 70;
 		_startTime = 0;
 
@@ -113,6 +114,11 @@ void DrinkShield::lightBarLevel(int level, int hs) {
 	refreshLights();
 }
 
+// Return the current level
+int DrinkShield::getLightBarLevel() {
+        return _currentLevel;
+}
+
 // Test the lights
 void DrinkShield::lightTest() {
 	int c1; 
@@ -161,7 +167,7 @@ void DrinkShield::pollSerial()
 			setPlayerLights(ON, OFF);
 			break;
                 case 's':      // Constant MQ-3 stream results
-                        streamResults = 1;
+                        streamResults = streamResult ? 0 : 1;
                         break;
                 case 'S':
                         lastAlive = millis();
@@ -201,6 +207,9 @@ void DrinkShield::pollSerial()
                         break;
                 case ';':
                         lightBarLevel(11, 0);
+                        break;
+                case 'p':     // Output light level
+                        outputLightLevel = outputLightLevel ? 0 : 1;
                         break;
 		}
 	}

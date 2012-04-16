@@ -26,6 +26,7 @@ class DrinkShield
 	char *version;
 	int playerReady;
         int streamResults;
+        int outputLightLevel;
         unsigned long lastAlive;
 	void refreshLights();
 	void updatePlayerLights();
@@ -33,6 +34,7 @@ class DrinkShield
 	void redLight(int);
 	void greenLight(int);
 	void lightBarLevel(int, int);
+        int getLightBarLevel();
 	void lightTest();
 	void pollSerial();
 	void autocalibrate(int);

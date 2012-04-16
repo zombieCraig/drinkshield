@@ -4,6 +4,7 @@ setPlayerLights	KEYWORD2
 redLight	KEYWORD2
 greenLight	KEYWORD2
 lightBarLevel	KEYWORD2
+getLightBarLevel KEYWORD2
 lightTest	KEYWORD2
 pollSerial	KEYWORD2
 autocalibrate	KEYWORD2

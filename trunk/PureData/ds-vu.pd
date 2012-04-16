@@ -1,0 +1,23 @@
+#N canvas 1347 133 450 300 10;
+#X obj 56 85 adc~;
+#X obj 103 126 env~ 220;
+#X obj 133 152 - 100;
+#X obj 238 64 vu 15 120 empty empty -1 -8 0 10 -66577 -1 1 0;
+#X obj 64 182 autoscale 48 59;
+#X obj 32 128 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X obj 98 222 i;
+#X obj 284 225 comport 0 9600;
+#X text 12 113 ReCalibrate;
+#X text 281 203 DrinkShield Setting;
+#X text 60 13 You will probably need to use JACK to get the adc to
+pull audio from your system and route into PD. Once audio starts to
+play you may want to ReCalibrate to get a better reading.;
+#X text 5 280 Requires at least firmware 0.4;
+#X connect 0 0 1 0;
+#X connect 1 0 2 0;
+#X connect 1 0 4 0;
+#X connect 2 0 3 0;
+#X connect 4 0 6 0;
+#X connect 5 0 4 3;
+#X connect 6 0 7 0;
