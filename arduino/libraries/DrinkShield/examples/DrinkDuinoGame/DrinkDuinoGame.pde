@@ -35,6 +35,15 @@ void setup()
  Serial.println(ds.version);
 }
 
+// Outputs the current lightBarLevel if enabled
+void printLightBar() {
+  if(ds.outputLightLevel) {
+    Serial.print("L");
+    Serial.print(ds.getLightBarLevel(), DEC);
+    Serial.println(); 
+  }
+}
+
 void loop()
 {
   // Process any commands from the connected system
@@ -47,7 +56,26 @@ void loop()
      reading 20 times)  This prevents the connectec machine
      from having to wait for the lightbar to go back down
      */
-    if(val && gotTopResult < 20) {
+    if (ds.streamResults) {
+      if(val) {
+        if(val > highscore) {
+          highscore = val;
+        }
+        Serial.print(val, DEC);
+        Serial.println();
+      } else if (highscore > 0 && gotTopResult >= 200) {
+        ds.playerReady = 0;
+        ds.greenLight(OFF);
+        ds.redLight(ON);
+        highscore = 0;
+        gotTopResult = 0; 
+      } else if (highscore) { // for each blank val add to gotTopResult
+        gotTopResult++;
+      }
+      lightLevel = ds.getLightLevel(val);
+      ds.lightBarLevel(lightLevel, 0);
+      printLightBar();
+    } else if(val && gotTopResult < 20) {
       // We have a reading from the sensor, process it
       lightLevel = ds.getLightLevel(val);
       // We will not start recording unless there is a basic
@@ -61,14 +89,11 @@ void loop()
       }
       // Display light level
       ds.lightBarLevel(lightLevel, highscoreLed);
-      // If constant streams are enable then print results
-      if (ds.streamResults) {
-        Serial.print(val, DEC);
-        Serial.println;
-      }
+      printLightBar();
     } else if(highscore) {
      // A highscore has been set so we had a reading, we are done
      ds.lightBarLevel(0, highscoreLed);
+     printLightBar();
      // Report the Highscore value to the system
      Serial.print(highscore, DEC);
      Serial.println();
@@ -85,6 +110,7 @@ void loop()
      ds.playerReady = 0;
      ds.redLight(ON);
      ds.lightBarLevel(0, 0);
+     printLightBar();
      highscore = 0;
      highscoreLed = 0;
      gotTopResult = 0;
