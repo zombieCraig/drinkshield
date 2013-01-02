@@ -167,7 +167,7 @@ void DrinkShield::pollSerial()
 			setPlayerLights(ON, OFF);
 			break;
                 case 's':      // Constant MQ-3 stream results
-                        streamResults = streamResult ? 0 : 1;
+                        streamResults = streamResults ? 0 : 1;
                         break;
                 case 'S':
                         lastAlive = millis();
